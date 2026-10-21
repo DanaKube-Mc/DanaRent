@@ -16,6 +16,11 @@ public class SuperiorSkyblockHook implements SkyblockHook {
     }
 
     @Override
+    public boolean isHooked() {
+        return isAvailable();
+    }
+
+    @Override
     public boolean hasIsland(Player player) {
         if (!isAvailable() || player == null) return false;
         SuperiorPlayer sp = SuperiorSkyblockAPI.getPlayer(player.getUniqueId());

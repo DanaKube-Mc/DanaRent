@@ -114,6 +114,13 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
         // 9. Écouteurs de récolte & bypass SSB2
         getServer().getPluginManager().registerEvents(new net.danakube.danarent.rental.HarvestListener(this), this);
 
+        // 10. Confinement spatial, protections anti-grief et cycle d'île SSB2
+        getServer().getPluginManager().registerEvents(new net.danakube.danarent.rental.ConfinementListener(this), this);
+        getServer().getPluginManager().registerEvents(new net.danakube.danarent.rental.PlotProtectionListener(this), this);
+        if (skyblockHook.isHooked()) {
+            getServer().getPluginManager().registerEvents(new net.danakube.danarent.rental.SkyblockTerminationListener(this), this);
+        }
+
         getLogger().info("DanaRent v" + getDescription().getVersion() + " activé avec succès.");
     }
 

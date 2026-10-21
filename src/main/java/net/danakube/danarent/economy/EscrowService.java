@@ -191,6 +191,14 @@ public class EscrowService {
         });
     }
 
+    public CompletableFuture<Void> refundRemainingEscrow(UUID tenantUuid, double amount) {
+        return CompletableFuture.runAsync(() -> {
+            if (amount > 0) {
+                economyHook.deposit(tenantUuid, round(amount));
+            }
+        });
+    }
+
     private double round(double value) {
         return BigDecimal.valueOf(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }

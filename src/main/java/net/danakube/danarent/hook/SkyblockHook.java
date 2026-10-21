@@ -12,4 +12,8 @@ public interface SkyblockHook {
     boolean isIslandAdminOrOwner(Player player, String islandId);
 
     boolean isCuboidFullyInsideIsland(Cuboid cuboid, String islandId);
+
+    default boolean isHooked() {
+        return false;
+    }
 }

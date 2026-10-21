@@ -57,4 +57,18 @@ class CuboidTest {
         assertThat(c1.overlaps(c4)).isFalse();
         assertThat(c1.overlaps(c5)).isTrue(); // Partage le bloc (10,10,10)
     }
+
+    @Test
+    @DisplayName("Devrait agrandir le cuboid avec expand(margin)")
+    void shouldExpandCuboidCorrectly() {
+        Cuboid cuboid = new Cuboid("world", 0, 10, 0, 10, 20, 10);
+        Cuboid expanded = cuboid.expand(1.0);
+
+        assertThat(expanded.getMinX()).isEqualTo(-1);
+        assertThat(expanded.getMinY()).isEqualTo(9);
+        assertThat(expanded.getMinZ()).isEqualTo(-1);
+        assertThat(expanded.getMaxX()).isEqualTo(11);
+        assertThat(expanded.getMaxY()).isEqualTo(21);
+        assertThat(expanded.getMaxZ()).isEqualTo(11);
+    }
 }

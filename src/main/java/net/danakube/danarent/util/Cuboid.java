@@ -127,6 +127,17 @@ public class Cuboid {
         return new Location(w, (minX + maxX) / 2.0 + 0.5, minY + 0.5, (minZ + maxZ) / 2.0 + 0.5);
     }
 
+    public Cuboid expand(int margin) {
+        return new Cuboid(worldName,
+                minX - margin, minY - margin, minZ - margin,
+                maxX + margin, maxY + margin, maxZ + margin);
+    }
+
+    public Cuboid expand(double margin) {
+        int m = (int) Math.ceil(margin);
+        return expand(m);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
