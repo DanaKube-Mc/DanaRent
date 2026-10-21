@@ -42,13 +42,13 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
         MessageManager msg = plugin.getMessageManager();
 
         if (args.length == 0) {
-            // Affichage de l'aide par défaut
-            player.sendMessage(msg.getMessage("wand.given"));
+            new net.danakube.danarent.gui.CatalogGUI(plugin, player, 1).open(player);
             return true;
         }
 
         String sub = args[0].toLowerCase();
         switch (sub) {
+            case "list" -> new net.danakube.danarent.gui.CatalogGUI(plugin, player, 1).open(player);
             case "wand" -> handleWand(player);
             case "create" -> handleCreate(player, args);
             case "delete" -> handleDelete(player, args);
@@ -217,7 +217,7 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            for (String sub : List.of("wand", "create", "delete", "return", "cancel")) {
+            for (String sub : List.of("list", "wand", "create", "delete", "return", "cancel")) {
                 if (sub.startsWith(args[0].toLowerCase())) {
                     completions.add(sub);
                 }
