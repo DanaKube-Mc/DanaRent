@@ -6,6 +6,13 @@ rental:
   expired-tenant: "<prefix><#ffaa00>Votre bail pour le champ <#ffffff><plot_name></#ffffff> est arrivé à expiration."
   cancelled-tenant: "<prefix><#ff5555>Bail résilié. Remboursement au prorata reçu : <#fdba5e><refund> ⛀</#fdba5e>."
   cancelled-owner: "<prefix><#ff5555>Le bail du champ <#ffffff><plot_name></#ffffff> a été résilié. Gains acquis : <#fdba5e><revenue> ⛀</#fdba5e>."
+  no-active-contract: "<prefix><#ff5555>Vous n'avez aucun bail de location actif actuellement.</#ff5555>"
+  returned-to-plot: "<prefix><#55ff55>Vous avez été téléporté sur votre champ <#ffffff><plot_name></#ffffff>.</#55ff55>"
+  cancelled-island-reset: "<prefix><#ff5555>L'île a été réinitialisée. Votre solde séquestré a été intégralement remboursé.</#ff5555>"
+  actionbar-timer: "<b><gradient:#F82F04:#FFEE2E>Temps restant :</gradient> <#ffffff><time_left></#ffffff> <#c0c0c0>|</b> <#fdba5e><plot_name></#fdba5e>"
+  already-renting: "<prefix><#ff5555>Vous avez déjà un bail de location actif. Utilisez /farm cancel pour le résilier.</#ff5555>"
+  plot-already-rented: "<prefix><#ff5555>Cette parcelle est actuellement louée par un autre joueur.</#ff5555>"
+
 
 security:
   protected-zone: "<prefix><#ff5555>Cette zone est actuellement louée par <#ffffff><tenant></#ffffff>. Fin du bail dans <#fdba5e><remaining_time></#fdba5e>."
@@ -16,3 +23,37 @@ economy:
   funds-collected: "<prefix><#55ff55>Vous avez collecté <#fdba5e><amount> ⛀</#fdba5e> de vos locations."
   no-funds: "<prefix><#ff5555>Vous n'avez aucun revenu en attente de collecte."
   insufficient-funds: "<prefix><#ff5555>Solde insuffisant pour louer ce champ (<#fdba5e><price> ⛀</#fdba5e> requis)."
+
+wand:
+  given: "<prefix><#55ff55>Vous avez reçu la baguette de sélection.</#55ff55>"
+  point-1-set: "<prefix><#55ff55>Point 1 défini en : <#fdba5e>X:<x> Y:<y> Z:<z></#fdba5e>"
+  point-2-set: "<prefix><#55ff55>Point 2 défini en : <#fdba5e>X:<x> Y:<y> Z:<z></#fdba5e> <#c0c0c0>(Volume: <#fdba5e><volume> blocs</#fdba5e>)</#c0c0c0>"
+
+plots:
+  error-no-selection: "<prefix><#ff5555>Veuillez d'abord définir les deux coins avec votre baguette (/farm wand).</#ff5555>"
+  error-different-worlds: "<prefix><#ff5555>Les deux points doivent être situés dans le même monde.</#ff5555>"
+  error-no-island: "<prefix><#ff5555>Vous ne possédez pas d'île sur ce serveur.</#ff5555>"
+  error-not-owner: "<prefix><#ff5555>Seul le propriétaire ou un administrateur d'île peut créer un champ.</#ff5555>"
+  error-outside-island: "<prefix><#ff5555>La parcelle dépasse les frontières autorisées de votre île.</#ff5555>"
+  error-overlapping: "<prefix><#ff5555>Cette zone chevauche un champ déjà existant.</#ff5555>"
+  error-limit-reached: "<prefix><#ff5555>Vous avez atteint la limite maximale de champs autorisés (<max>).</#ff5555>"
+  created-success: "<prefix><#55ff55>Le champ <#ffffff><plot_name></#ffffff> a été créé avec succès !</#55ff55>"
+  deleted-success: "<prefix><#55ff55>Le champ <#ffffff><plot_name></#ffffff> a été supprimé.</#55ff55>"
+  error-has-active-contract: "<prefix><#ff5555>Impossible de supprimer ce champ car un bail de location est actuellement en cours.</#ff5555>"
+  error-not-found: "<prefix><#ff5555>Aucun champ trouvé sous le nom <#ffffff><plot_name></#ffffff>.</#ff5555>"
+  inspecting: "<prefix><#55ff55>Téléportation d'inspection devant le champ <#ffffff><plot_name></#ffffff>.</#55ff55>"
+  whitelist-saved: "<prefix><#55ff55>La whitelist des blocs autorisés au minage a été enregistrée avec succès !</#55ff55>"
+
+admin:
+  reloaded: "<prefix><#55ff55>Configurations et interfaces rechargées avec succès !</#55ff55>"
+  no-permission: "<prefix><#ff5555>Vous n'avez pas la permission d'exécuter cette commande.</#ff5555>"
+  only-player: "<prefix><#ff5555>Seul un joueur peut exécuter cette commande.</#ff5555>"
+  unknown-command: "<prefix><#ff5555>Sous-commande inconnue. Utilisez : <#fdba5e>/danarent [reload|collect|listall]</#fdba5e></#ff5555>"
+  listall-header: "<b><gradient:#F82F04:#FFEE2E>=== Liste des Parcelles Serveur ===</gradient></b>"
+  listall-item: "<#808080>- [<#fdba5e><id></#fdba5e>] <#ffffff><plot_name></#ffffff> (<#fdba5e><type></#fdba5e>) - Propriétaire: <#ffffff><owner></#ffffff> - Statut: <status>"
+  listall-empty: "<prefix><#808080>Aucune parcelle enregistrée sur le serveur.</#808080>"
+  status-rented: "<#55ff55>Loué par <tenant></#55ff55>"
+  status-available: "<#fdba5e>Disponible</#fdba5e>"
+  status-unlisted: "<#808080>Non listé</#808080>"
+
+

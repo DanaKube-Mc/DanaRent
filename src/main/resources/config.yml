@@ -18,3 +18,13 @@ settings:
 limits:
   default-plots-per-island: 3
   # Les limites par grade s'obtiennent via permissions LuckPerms: danarent.limit.<nombre>
+
+wand:
+  material: "GOLDEN_HOE"
+  name: "<b><gradient:#F82F04:#FFEE2E>Baguette de Sélection</gradient></b>"
+  lore:
+    - "<#c0c0c0>Délimitez votre parcelle de location."
+    - "<#55ff55>Clic gauche <#c0c0c0>: Définir le <#ffffff>Coin 1</#ffffff>"
+    - "<#55ff55>Clic droit  <#c0c0c0>: Définir le <#ffffff>Coin 2</#ffffff>"
+  custom-model-data: 0
+
