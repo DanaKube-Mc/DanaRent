@@ -36,6 +36,7 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     private net.danakube.danarent.hook.SkyblockHook skyblockHook;
     private net.danakube.danarent.visual.ParticleVisualizer particleVisualizer;
     private net.danakube.danarent.rental.RentalManager rentalManager;
+    private net.danakube.danarent.gui.GUIManager guiManager;
 
     public static DanaRentPlugin getInstance() {
         return instance;
@@ -121,6 +122,11 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
             getServer().getPluginManager().registerEvents(new net.danakube.danarent.rental.SkyblockTerminationListener(this), this);
         }
 
+        // 11. Initialisation du gestionnaire de menus (GUIs)
+        this.guiManager = new net.danakube.danarent.gui.GUIManager(this);
+        this.guiManager.loadConfigs();
+        getServer().getPluginManager().registerEvents(new net.danakube.danarent.gui.GUIListener(), this);
+
         getLogger().info("DanaRent v" + getDescription().getVersion() + " activé avec succès.");
     }
 
@@ -199,5 +205,10 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
 
     public EconomyHook getEconomyHook() {
         return economyHook;
+    }
+
+    @Override
+    public net.danakube.danarent.gui.GUIManager getGuiManager() {
+        return guiManager;
     }
 }

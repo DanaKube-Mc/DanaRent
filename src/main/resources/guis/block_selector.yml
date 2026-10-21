@@ -1,0 +1,58 @@
+title: "<b><gradient:#F82F04:#FFEE2E>Sélecteur de Blocs</gradient></b>"
+size: 54
+
+borders:
+  corners:
+    material: "BLACK_STAINED_GLASS_PANE"
+    name: " "
+    slots: [0, 8, 45, 53]
+  inner:
+    material: "GRAY_STAINED_GLASS_PANE"
+    name: " "
+    slots: [1, 2, 3, 4, 5, 6, 7, 9, 17, 18, 26, 27, 35, 36, 44, 46, 47, 51, 52]
+
+buttons:
+  return_button:
+    slot: 45
+    material: "ARROW"
+    name: "<#ff5555>« Annuler / Retour</#ff5555>"
+    lore:
+      - "<#c0c0c0>Revenir à la gestion de la parcelle"
+  previous_page:
+    slot: 48
+    material: "ARROW"
+    name: "<#55ff55>« Page précédente</#55ff55>"
+    lore:
+      - "<#c0c0c0>Page <page>"
+  save_whitelist:
+    slot: 49
+    material: "EMERALD"
+    name: "<#55ff55><b>Enregistrer la Whitelist</b></#55ff55>"
+    lore:
+      - "<#c0c0c0>Blocs autorisés : <#fdba5e><allowed_count></#fdba5e> / <#ffffff><total_count></#ffffff>"
+      - ""
+      - "<#55ff55>▶ Cliquez pour valider et sauvegarder"
+  next_page:
+    slot: 50
+    material: "ARROW"
+    name: "<#55ff55>Page suivante »</#55ff55>"
+    lore:
+      - "<#c0c0c0>Page <page>"
+
+items:
+  allowed:
+    glow: true
+    name: "<#55ff55><block_name></#55ff55>"
+    lore:
+      - "<#55ff55>✔ AUTORISÉ AU MINAGE</#55ff55>"
+      - "<#c0c0c0>Le locataire a le droit de casser ce bloc."
+      - ""
+      - "<#ffaa00>▶ Cliquez pour INTERDIRE ce bloc</#ffaa00>"
+  disallowed:
+    glow: false
+    name: "<#ff5555><block_name></#ff5555>"
+    lore:
+      - "<#ff5555>✖ INTERDIT AU MINAGE</#ff5555>"
+      - "<#c0c0c0>Ce bloc restera protégé et incassable."
+      - ""
+      - "<#55ff55>▶ Cliquez pour AUTORISER ce bloc</#55ff55>"

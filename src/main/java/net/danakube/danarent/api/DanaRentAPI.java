@@ -29,4 +29,6 @@ public interface DanaRentAPI {
     net.danakube.danarent.visual.ParticleVisualizer getParticleVisualizer();
 
     net.danakube.danarent.rental.RentalManager getRentalManager();
+
+    net.danakube.danarent.gui.GUIManager getGuiManager();
 }
