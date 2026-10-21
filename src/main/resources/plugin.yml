@@ -13,6 +13,10 @@ commands:
     description: Commande principale pour gérer les parcelles de location
     permission: danarent.use
     aliases: [champs, location]
+  danarent:
+    description: Commande d'administration et de gestion pour DanaRent
+    permission: danarent.owner
+    aliases: [drent]
 
 permissions:
   danarent.use:

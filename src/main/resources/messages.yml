@@ -44,3 +44,16 @@ plots:
   inspecting: "<prefix><#55ff55>Téléportation d'inspection devant le champ <#ffffff><plot_name></#ffffff>.</#55ff55>"
   whitelist-saved: "<prefix><#55ff55>La whitelist des blocs autorisés au minage a été enregistrée avec succès !</#55ff55>"
 
+admin:
+  reloaded: "<prefix><#55ff55>Configurations et interfaces rechargées avec succès !</#55ff55>"
+  no-permission: "<prefix><#ff5555>Vous n'avez pas la permission d'exécuter cette commande.</#ff5555>"
+  only-player: "<prefix><#ff5555>Seul un joueur peut exécuter cette commande.</#ff5555>"
+  unknown-command: "<prefix><#ff5555>Sous-commande inconnue. Utilisez : <#fdba5e>/danarent [reload|collect|listall]</#fdba5e></#ff5555>"
+  listall-header: "<b><gradient:#F82F04:#FFEE2E>=== Liste des Parcelles Serveur ===</gradient></b>"
+  listall-item: "<#808080>- [<#fdba5e><id></#fdba5e>] <#ffffff><plot_name></#ffffff> (<#fdba5e><type></#fdba5e>) - Propriétaire: <#ffffff><owner></#ffffff> - Statut: <status>"
+  listall-empty: "<prefix><#808080>Aucune parcelle enregistrée sur le serveur.</#808080>"
+  status-rented: "<#55ff55>Loué par <tenant></#55ff55>"
+  status-available: "<#fdba5e>Disponible</#fdba5e>"
+  status-unlisted: "<#808080>Non listé</#808080>"
+
+
