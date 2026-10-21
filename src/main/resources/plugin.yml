@@ -7,3 +7,26 @@ description: Plugin de location de parcelles agricoles et de minage pour Danakub
 softdepend:
   - Vault
   - SuperiorSkyblock2
+
+commands:
+  farm:
+    description: Commande principale pour gérer les parcelles de location
+    permission: danarent.use
+    aliases: [champs, location]
+
+permissions:
+  danarent.use:
+    description: Permet d'accéder aux commandes DanaRent
+    default: true
+  danarent.owner:
+    description: Permet de gérer ses parcelles et obtenir la baguette
+    default: op
+    children:
+      danarent.use: true
+  danarent.admin:
+    description: Droits administrateur complets pour DanaRent
+    default: op
+    children:
+      danarent.owner: true
+
+
