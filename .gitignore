@@ -1,5 +1,6 @@
 # Target build files
 target/
+dependency-reduced-pom.xml
 *.jar
 *.war
 *.nar
