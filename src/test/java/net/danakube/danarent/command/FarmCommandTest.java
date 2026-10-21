@@ -99,16 +99,16 @@ class FarmCommandTest {
         player.performCommand("farm create ChampBlé farm");
 
         // Attente de l'enregistrement asynchrone
-        for (int i = 0; i < 20; i++) {
-            if (plugin.getPlotManager().getPlotByName("ChampBlé", player.getUniqueId()).isPresent()) {
+        String msg = null;
+        for (int i = 0; i < 40; i++) {
+            msg = player.nextMessage();
+            if (msg != null) {
                 break;
             }
             Thread.sleep(50);
         }
 
-        String msg = player.nextMessage();
-        assertThat(msg).contains("ChampBlé");
-
+        assertThat(msg).isNotNull().contains("ChampBlé");
         assertThat(plugin.getPlotManager().getPlotByName("ChampBlé", player.getUniqueId())).isPresent();
     }
 
@@ -125,26 +125,25 @@ class FarmCommandTest {
         sel.setPos2(new Location(world, 10, 70, 10));
         player.performCommand("farm create A_Supprimer");
 
-        for (int i = 0; i < 20; i++) {
-            if (plugin.getPlotManager().getPlotByName("A_Supprimer", player.getUniqueId()).isPresent()) {
+        for (int i = 0; i < 40; i++) {
+            if (player.nextMessage() != null) {
                 break;
             }
             Thread.sleep(50);
         }
-        player.nextMessage(); // Consommer le message de création
 
         player.performCommand("farm delete A_Supprimer");
 
-        for (int i = 0; i < 20; i++) {
-            if (plugin.getPlotManager().getPlotByName("A_Supprimer", player.getUniqueId()).isEmpty()) {
+        String delMsg = null;
+        for (int i = 0; i < 40; i++) {
+            delMsg = player.nextMessage();
+            if (delMsg != null) {
                 break;
             }
             Thread.sleep(50);
         }
 
-        String delMsg = player.nextMessage();
-        assertThat(delMsg).contains("supprimé");
-
+        assertThat(delMsg).isNotNull().contains("supprimé");
         assertThat(plugin.getPlotManager().getPlotByName("A_Supprimer", player.getUniqueId())).isEmpty();
     }
 

@@ -111,6 +111,9 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
         this.rentalManager = new net.danakube.danarent.rental.RentalManager(contractRepository);
         getServer().getScheduler().runTaskTimer(this, new net.danakube.danarent.rental.RentalTimerTask(this), 20L, 20L);
 
+        // 9. Écouteurs de récolte & bypass SSB2
+        getServer().getPluginManager().registerEvents(new net.danakube.danarent.rental.HarvestListener(this), this);
+
         getLogger().info("DanaRent v" + getDescription().getVersion() + " activé avec succès.");
     }
 
