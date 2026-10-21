@@ -49,6 +49,13 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
         String sub = args[0].toLowerCase();
         switch (sub) {
             case "list" -> new net.danakube.danarent.gui.CatalogGUI(plugin, player, 1).open(player);
+            case "manage" -> {
+                if (!player.hasPermission("danarent.owner")) {
+                    player.sendMessage(plugin.getMessageManager().getMessage("plots.error-not-owner"));
+                } else {
+                    new net.danakube.danarent.gui.ManageGUI(plugin, player, 1).open(player);
+                }
+            }
             case "wand" -> handleWand(player);
             case "create" -> handleCreate(player, args);
             case "delete" -> handleDelete(player, args);
@@ -217,7 +224,7 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            for (String sub : List.of("list", "wand", "create", "delete", "return", "cancel")) {
+            for (String sub : List.of("list", "manage", "wand", "create", "delete", "return", "cancel")) {
                 if (sub.startsWith(args[0].toLowerCase())) {
                     completions.add(sub);
                 }
