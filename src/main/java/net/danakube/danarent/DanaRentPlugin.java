@@ -36,6 +36,7 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     private net.danakube.danarent.hook.SkyblockHook skyblockHook;
     private net.danakube.danarent.visual.ParticleVisualizer particleVisualizer;
     private net.danakube.danarent.rental.RentalManager rentalManager;
+    private net.danakube.danarent.gui.GUIManager guiManager;
 
     public static DanaRentPlugin getInstance() {
         return instance;
@@ -107,6 +108,13 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
             farmCmd.setTabCompleter(fc);
         }
 
+        org.bukkit.command.PluginCommand danarentCmd = getCommand("danarent");
+        if (danarentCmd != null) {
+            net.danakube.danarent.command.DanaRentCommand dc = new net.danakube.danarent.command.DanaRentCommand(this);
+            danarentCmd.setExecutor(dc);
+            danarentCmd.setTabCompleter(dc);
+        }
+
         // 8. Initialisation du gestionnaire de location et tâche périodique 20t
         this.rentalManager = new net.danakube.danarent.rental.RentalManager(contractRepository);
         getServer().getScheduler().runTaskTimer(this, new net.danakube.danarent.rental.RentalTimerTask(this), 20L, 20L);
@@ -120,6 +128,11 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
         if (skyblockHook.isHooked()) {
             getServer().getPluginManager().registerEvents(new net.danakube.danarent.rental.SkyblockTerminationListener(this), this);
         }
+
+        // 11. Initialisation du gestionnaire de menus (GUIs)
+        this.guiManager = new net.danakube.danarent.gui.GUIManager(this);
+        this.guiManager.loadConfigs();
+        getServer().getPluginManager().registerEvents(new net.danakube.danarent.gui.GUIListener(), this);
 
         getLogger().info("DanaRent v" + getDescription().getVersion() + " activé avec succès.");
     }
@@ -199,5 +212,37 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
 
     public EconomyHook getEconomyHook() {
         return economyHook;
+    }
+
+    public void setEconomyHook(EconomyHook economyHook) {
+        this.economyHook = economyHook;
+        if (plotRepository != null && contractRepository != null) {
+            this.escrowService = new EscrowService(economyHook, plotRepository, contractRepository);
+        }
+    }
+
+    @Override
+    public net.danakube.danarent.gui.GUIManager getGuiManager() {
+        return guiManager;
+    }
+
+    public void reloadPlugin() {
+        reloadConfig();
+        this.configManager = new ConfigManager(getConfig());
+
+        File messagesFile = new File(getDataFolder(), "messages.yml");
+        if (!messagesFile.exists()) {
+            saveResource("messages.yml", false);
+        }
+        YamlConfiguration messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
+        InputStream defaultMessagesStream = getResource("messages.yml");
+        if (defaultMessagesStream != null) {
+            messagesConfig.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defaultMessagesStream, StandardCharsets.UTF_8)));
+        }
+        this.messageManager = new MessageManager(messagesConfig);
+
+        if (this.guiManager != null) {
+            this.guiManager.loadConfigs();
+        }
     }
 }

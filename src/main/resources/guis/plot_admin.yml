@@ -1,0 +1,84 @@
+title: "<b><gradient:#F82F04:#FFEE2E>Édition : <plot_name></gradient></b>"
+size: 27
+
+borders:
+  corners:
+    material: "BLACK_STAINED_GLASS_PANE"
+    name: " "
+    slots: [0, 8, 18, 26]
+  inner:
+    material: "GRAY_STAINED_GLASS_PANE"
+    name: " "
+    slots: [1, 2, 3, 4, 5, 6, 7, 9, 17, 20, 21, 22, 23, 24, 25]
+
+buttons:
+  return_button:
+    slot: 19
+    material: "ARROW"
+    name: "<#ff5555>« Retour aux parcelles</#ff5555>"
+    lore:
+      - "<#c0c0c0>Revenir à la liste"
+  toggle_type:
+    slot: 10
+    material_farm: "WHEAT"
+    material_mining: "IRON_PICKAXE"
+    name: "<#fdba5e>Type de parcelle : <type_label></#fdba5e>"
+    lore:
+      - "<#c0c0c0>Type actuel : <#ffffff><type_label></#ffffff>"
+      - ""
+      - "<#55ff55>▶ Cliquez pour basculer (FARM / MINING)"
+  change_price:
+    slot: 11
+    material: "GOLD_INGOT"
+    name: "<#fdba5e>Tarif : <price> ⛀</#fdba5e>"
+    lore:
+      - "<#c0c0c0>Prix pour la période de bail"
+      - ""
+      - "<#55ff55>▶ Clic gauche : +10 ⛀"
+      - "<#ff5555>▶ Clic droit  : -10 ⛀"
+  change_duration:
+    slot: 12
+    material: "CLOCK"
+    name: "<#fdba5e>Durée du bail : <duration_formatted></#fdba5e>"
+    lore:
+      - "<#c0c0c0>Durée d'exploitation accordée"
+      - ""
+      - "<#55ff55>▶ Clic gauche : Augmenter (+15m)"
+      - "<#ff5555>▶ Clic droit  : Diminuer (-15m)"
+  toggle_listed:
+    slot: 13
+    material_listed: "LIME_DYE"
+    material_unlisted: "GRAY_DYE"
+    name: "<#fdba5e>Marché : <market_status></#fdba5e>"
+    lore:
+      - "<#c0c0c0>Statut : <market_status>"
+      - ""
+      - "<#55ff55>▶ Cliquez pour changer la visibilité"
+  whitelist_blocks:
+    slot: 14
+    material: "DEEPSLATE_COAL_ORE"
+    name: "<#fdba5e>Whitelist Minage (<count> blocs)</#fdba5e>"
+    lore:
+      - "<#c0c0c0>Gérer les blocs autorisés à la casse"
+      - ""
+      - "<#55ff55>▶ Cliquez pour ouvrir le sélecteur"
+  contract_info:
+    slot: 15
+    material_active: "REDSTONE"
+    material_none: "BOOK"
+    name: "<#fdba5e>Bail en cours</#fdba5e>"
+    lore:
+      - "<#c0c0c0>Statut : <contract_status>"
+      - "<#c0c0c0>Locataire : <tenant_name>"
+      - "<#c0c0c0>Temps restant : <remaining_time>"
+      - ""
+      - "<#ff5555>▶ Maj+Clic pour résilier d'urgence"
+  delete_plot:
+    slot: 16
+    material: "TNT"
+    name: "<#ff5555><b>Supprimer la parcelle</b></#ff5555>"
+    lore:
+      - "<#c0c0c0>Supprime définitivement cette parcelle"
+      - "<#ff5555>Action irréversible !"
+      - ""
+      - "<#ff5555>▶ Maj+Clic pour confirmer la suppression"

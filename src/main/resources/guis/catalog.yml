@@ -1,0 +1,50 @@
+title: "<b><gradient:#F82F04:#FFEE2E>Catalogue des Terrains</gradient></b>"
+size: 54
+
+borders:
+  corners:
+    material: "BLACK_STAINED_GLASS_PANE"
+    name: " "
+    slots: [0, 8, 45, 53]
+  inner:
+    material: "GRAY_STAINED_GLASS_PANE"
+    name: " "
+    slots: [1, 2, 3, 4, 5, 6, 7, 9, 17, 18, 26, 27, 35, 36, 44, 46, 47, 51, 52]
+
+buttons:
+  previous_page:
+    slot: 48
+    material: "ARROW"
+    name: "<#55ff55>« Page précédente</#55ff55>"
+    lore:
+      - "<#c0c0c0>Page <page>"
+  page_info:
+    slot: 49
+    material: "BOOK"
+    name: "<b><gradient:#F82F04:#FFEE2E>Page <current_page> / <total_pages></gradient></b>"
+    lore:
+      - "<#c0c0c0>Total parcelles : <#ffffff><total_plots></#ffffff>"
+  next_page:
+    slot: 50
+    material: "ARROW"
+    name: "<#55ff55>Page suivante »</#55ff55>"
+    lore:
+      - "<#c0c0c0>Page <page>"
+
+plot_card:
+  material_farm: "HAY_BLOCK"
+  material_mining: "DEEPSLATE_DIAMOND_ORE"
+  name: "<b><gradient:#F82F04:#FFEE2E><plot_name></gradient></b>"
+  lore:
+    - "<#808080>Propriétaire : <#ffffff><owner_name></#ffffff>"
+    - "<#808080>Type : <#fdba5e><type_label></#fdba5e>"
+    - "<#808080>Monde : <#ffffff><world></#ffffff>"
+    - "<#808080>Dimensions : <#fdba5e><width>x<length>x<height></#fdba5e>"
+    - ""
+    - "<#808080>Tarif : <#fdba5e><price> ⛀</#fdba5e>"
+    - "<#808080>Durée du bail : <#fdba5e><duration_formatted></#fdba5e>"
+    - ""
+    - "<#808080>Statut : <status_colored>"
+    - ""
+    - "<#55ff55>▶ Clic gauche : <#ffffff>Louer immédiatement"
+    - "<#ffaa00>▶ Clic droit  : <#ffffff>Visiter et inspecter la zone"

@@ -10,6 +10,8 @@ rental:
   returned-to-plot: "<prefix><#55ff55>Vous avez été téléporté sur votre champ <#ffffff><plot_name></#ffffff>.</#55ff55>"
   cancelled-island-reset: "<prefix><#ff5555>L'île a été réinitialisée. Votre solde séquestré a été intégralement remboursé.</#ff5555>"
   actionbar-timer: "<b><gradient:#F82F04:#FFEE2E>Temps restant :</gradient> <#ffffff><time_left></#ffffff> <#c0c0c0>|</b> <#fdba5e><plot_name></#fdba5e>"
+  already-renting: "<prefix><#ff5555>Vous avez déjà un bail de location actif. Utilisez /farm cancel pour le résilier.</#ff5555>"
+  plot-already-rented: "<prefix><#ff5555>Cette parcelle est actuellement louée par un autre joueur.</#ff5555>"
 
 
 security:
@@ -39,4 +41,19 @@ plots:
   deleted-success: "<prefix><#55ff55>Le champ <#ffffff><plot_name></#ffffff> a été supprimé.</#55ff55>"
   error-has-active-contract: "<prefix><#ff5555>Impossible de supprimer ce champ car un bail de location est actuellement en cours.</#ff5555>"
   error-not-found: "<prefix><#ff5555>Aucun champ trouvé sous le nom <#ffffff><plot_name></#ffffff>.</#ff5555>"
+  inspecting: "<prefix><#55ff55>Téléportation d'inspection devant le champ <#ffffff><plot_name></#ffffff>.</#55ff55>"
+  whitelist-saved: "<prefix><#55ff55>La whitelist des blocs autorisés au minage a été enregistrée avec succès !</#55ff55>"
+
+admin:
+  reloaded: "<prefix><#55ff55>Configurations et interfaces rechargées avec succès !</#55ff55>"
+  no-permission: "<prefix><#ff5555>Vous n'avez pas la permission d'exécuter cette commande.</#ff5555>"
+  only-player: "<prefix><#ff5555>Seul un joueur peut exécuter cette commande.</#ff5555>"
+  unknown-command: "<prefix><#ff5555>Sous-commande inconnue. Utilisez : <#fdba5e>/danarent [reload|collect|listall]</#fdba5e></#ff5555>"
+  listall-header: "<b><gradient:#F82F04:#FFEE2E>=== Liste des Parcelles Serveur ===</gradient></b>"
+  listall-item: "<#808080>- [<#fdba5e><id></#fdba5e>] <#ffffff><plot_name></#ffffff> (<#fdba5e><type></#fdba5e>) - Propriétaire: <#ffffff><owner></#ffffff> - Statut: <status>"
+  listall-empty: "<prefix><#808080>Aucune parcelle enregistrée sur le serveur.</#808080>"
+  status-rented: "<#55ff55>Loué par <tenant></#55ff55>"
+  status-available: "<#fdba5e>Disponible</#fdba5e>"
+  status-unlisted: "<#808080>Non listé</#808080>"
+
 
