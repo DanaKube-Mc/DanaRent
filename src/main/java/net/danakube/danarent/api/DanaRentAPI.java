@@ -17,4 +17,6 @@ public interface DanaRentAPI {
     ContractRepository getContractRepository();
 
     EscrowService getEscrowService();
+
+    net.danakube.danarent.wand.SelectionManager getSelectionManager();
 }

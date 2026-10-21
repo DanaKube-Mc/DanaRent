@@ -30,6 +30,7 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     private ContractRepository contractRepository;
     private EconomyHook economyHook;
     private EscrowService escrowService;
+    private net.danakube.danarent.wand.SelectionManager selectionManager;
 
     public static DanaRentPlugin getInstance() {
         return instance;
@@ -83,6 +84,10 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
         }
         this.escrowService = new EscrowService(economyHook, plotRepository, contractRepository);
 
+        // 5. Initialisation du gestionnaire de sélection et écouteurs Wand
+        this.selectionManager = new net.danakube.danarent.wand.SelectionManager();
+        getServer().getPluginManager().registerEvents(new net.danakube.danarent.wand.WandListener(this, selectionManager), this);
+
         getLogger().info("DanaRent v" + getDescription().getVersion() + " activé avec succès.");
     }
 
@@ -120,6 +125,11 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     @Override
     public EscrowService getEscrowService() {
         return escrowService;
+    }
+
+    @Override
+    public net.danakube.danarent.wand.SelectionManager getSelectionManager() {
+        return selectionManager;
     }
 
     public EconomyHook getEconomyHook() {

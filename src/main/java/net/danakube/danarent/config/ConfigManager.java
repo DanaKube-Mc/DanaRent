@@ -15,6 +15,11 @@ public class ConfigManager {
 
     private int defaultPlotsPerIsland;
 
+    private String wandMaterial;
+    private String wandName;
+    private java.util.List<String> wandLore;
+    private int wandCustomModelData;
+
     public ConfigManager(ConfigurationSection config) {
         reload(config);
     }
@@ -35,6 +40,11 @@ public class ConfigManager {
         this.borderColorHex = config.getString("settings.particles.border-color", "#00FF00");
 
         this.defaultPlotsPerIsland = config.getInt("limits.default-plots-per-island", 3);
+
+        this.wandMaterial = config.getString("wand.material", "GOLDEN_HOE");
+        this.wandName = config.getString("wand.name", "<b><gradient:#F82F04:#FFEE2E>Baguette de Sélection</gradient></b>");
+        this.wandLore = config.getStringList("wand.lore");
+        this.wandCustomModelData = config.getInt("wand.custom-model-data", 0);
     }
 
     private void applyDefaults() {
@@ -46,6 +56,31 @@ public class ConfigManager {
         this.warningColorHex = "#FFA500";
         this.borderColorHex = "#00FF00";
         this.defaultPlotsPerIsland = 3;
+
+        this.wandMaterial = "GOLDEN_HOE";
+        this.wandName = "<b><gradient:#F82F04:#FFEE2E>Baguette de Sélection</gradient></b>";
+        this.wandLore = java.util.List.of(
+                "<#c0c0c0>Délimitez votre parcelle de location.",
+                "<#55ff55>Clic gauche <#c0c0c0>: Définir le <#ffffff>Coin 1",
+                "<#55ff55>Clic droit  <#c0c0c0>: Définir le <#ffffff>Coin 2"
+        );
+        this.wandCustomModelData = 0;
+    }
+
+    public String getWandMaterial() {
+        return wandMaterial;
+    }
+
+    public String getWandName() {
+        return wandName;
+    }
+
+    public java.util.List<String> getWandLore() {
+        return wandLore;
+    }
+
+    public int getWandCustomModelData() {
+        return wandCustomModelData;
     }
 
     public String getDatabaseFile() {
