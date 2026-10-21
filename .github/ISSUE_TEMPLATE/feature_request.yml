@@ -1,0 +1,28 @@
+name: "Demande de Fonctionnalité"
+description: "Suggérer une nouvelle idée ou amélioration pour DanaRent"
+title: "[FEAT]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Partagez vos idées pour enrichir DanaRent !
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Votre demande est-elle liée à un problème existant ?"
+      description: "Une description claire du cas d'usage ou du manque constaté."
+    validations:
+      required: false
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Solution / Fonctionnalité souhaitée"
+      description: "Décrivez ce que vous aimeriez voir implémenté."
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: "Contexte additionnel ou alternatives envisagées"
+      description: "Tout autre détail, capture d'écran, maquette de menu GUI ou exemple."

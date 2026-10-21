@@ -1,0 +1,49 @@
+name: "Rapport de Bug"
+description: "Signaler un dysfonctionnement ou une erreur dans DanaRent"
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler ce bug pour nous aider à améliorer DanaRent !
+  - type: input
+    id: environment
+    attributes:
+      label: "Environnement Serveur"
+      description: "Version exacte de Paper et Java utilisée"
+      placeholder: "ex: Paper 1.21.1 build #120, Java 21 Temurin"
+    validations:
+      required: true
+  - type: input
+    id: plugin_version
+    attributes:
+      label: "Version de DanaRent"
+      description: "Version du plugin (ex: /danarent version ou commit)"
+      placeholder: "ex: v1.0.0-SNAPSHOT"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description du problème"
+      description: "Explication claire et concise du problème rencontré."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Étapes pour reproduire"
+      description: "Étapes détaillées pour reproduire le bug."
+      placeholder: |
+        1. Créer une parcelle avec le wand
+        2. Configurer le prix à 100
+        3. Essayer de louer avec un compte joueur
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Stacktrace / Logs d'erreur"
+      description: "Collez ici les logs d'erreurs éventuels de la console Minecraft."
+      render: shell
