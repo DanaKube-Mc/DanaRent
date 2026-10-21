@@ -1,0 +1,20 @@
+# Configuration principale DanaRent
+database:
+  file: "data.db"
+  pool:
+    maximum-pool-size: 5
+    connection-timeout: 30000
+
+settings:
+  # Monnaie affichée dans les textes
+  currency-symbol: "⛀"
+  # Buffer de tolérance pour le confinement spatial en blocs
+  boundary-buffer: 1.0
+  # Particules affichées aux limites
+  particles:
+    warning-color: "#FFA500" # Orange lors de l'approche du buffer
+    border-color: "#00FF00"  # Vert pour marquer le champ
+
+limits:
+  default-plots-per-island: 3
+  # Les limites par grade s'obtiennent via permissions LuckPerms: danarent.limit.<nombre>

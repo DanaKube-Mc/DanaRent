@@ -1,0 +1,18 @@
+prefix: "<b><gradient:#F82F04:#FFEE2E>[Location]</gradient> <#c0c0c0>|</b> "
+
+rental:
+  started-tenant: "<prefix><#55ff55>Vous avez loué le champ <#ffffff><plot_name></#ffffff> pour <#fdba5e><duration></#fdba5e> (<#fdba5e><price> ⛀</#fdba5e>) !"
+  started-owner: "<prefix><#55ff55>Le joueur <#ffffff><tenant></#ffffff> a loué votre champ <#ffffff><plot_name></#ffffff> !"
+  expired-tenant: "<prefix><#ffaa00>Votre bail pour le champ <#ffffff><plot_name></#ffffff> est arrivé à expiration."
+  cancelled-tenant: "<prefix><#ff5555>Bail résilié. Remboursement au prorata reçu : <#fdba5e><refund> ⛀</#fdba5e>."
+  cancelled-owner: "<prefix><#ff5555>Le bail du champ <#ffffff><plot_name></#ffffff> a été résilié. Gains acquis : <#fdba5e><revenue> ⛀</#fdba5e>."
+
+security:
+  protected-zone: "<prefix><#ff5555>Cette zone est actuellement louée par <#ffffff><tenant></#ffffff>. Fin du bail dans <#fdba5e><remaining_time></#fdba5e>."
+  boundary-warning: "<prefix><#ff5555>Restez dans les limites de votre champ !"
+  unauthorized-block: "<prefix><#ff5555>Vous n'êtes pas autorisé à casser ce type de bloc dans cette carrière."
+
+economy:
+  funds-collected: "<prefix><#55ff55>Vous avez collecté <#fdba5e><amount> ⛀</#fdba5e> de vos locations."
+  no-funds: "<prefix><#ff5555>Vous n'avez aucun revenu en attente de collecte."
+  insufficient-funds: "<prefix><#ff5555>Solde insuffisant pour louer ce champ (<#fdba5e><price> ⛀</#fdba5e> requis)."

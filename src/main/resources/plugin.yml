@@ -1,0 +1,9 @@
+name: DanaRent
+version: '${project.version}'
+main: net.danakube.danarent.DanaRentPlugin
+api-version: '1.21'
+author: Danakube
+description: Plugin de location de parcelles agricoles et de minage pour Danakube
+softdepend:
+  - Vault
+  - SuperiorSkyblock2
