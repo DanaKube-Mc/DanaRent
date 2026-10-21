@@ -27,4 +27,6 @@ public interface DanaRentAPI {
     net.danakube.danarent.hook.SkyblockHook getSkyblockHook();
 
     net.danakube.danarent.visual.ParticleVisualizer getParticleVisualizer();
+
+    net.danakube.danarent.rental.RentalManager getRentalManager();
 }

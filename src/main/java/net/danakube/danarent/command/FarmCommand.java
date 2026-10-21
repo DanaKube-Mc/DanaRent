@@ -52,6 +52,8 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
             case "wand" -> handleWand(player);
             case "create" -> handleCreate(player, args);
             case "delete" -> handleDelete(player, args);
+            case "return" -> handleReturn(player);
+            case "cancel" -> handleCancel(player);
             default -> player.sendMessage(msg.getMessage("wand.given"));
         }
 
@@ -159,11 +161,63 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
         });
     }
 
+    private void handleReturn(Player player) {
+        MessageManager msg = plugin.getMessageManager();
+        net.danakube.danarent.model.ActiveContract contract = plugin.getRentalManager().getActiveContractByTenant(player.getUniqueId());
+        if (contract == null) {
+            player.sendMessage(msg.getMessage("rental.no-active-contract"));
+            return;
+        }
+
+        Optional<RentPlot> plotOpt = plugin.getPlotManager().getPlot(contract.getPlotId());
+        if (plotOpt.isEmpty()) {
+            player.sendMessage(msg.getMessage("rental.no-active-contract"));
+            return;
+        }
+
+        RentPlot plot = plotOpt.get();
+        player.teleport(plot.getCuboid().getCenter());
+        player.sendMessage(msg.getMessage("rental.returned-to-plot", Map.of("plot_name", plot.getName())));
+    }
+
+    private void handleCancel(Player player) {
+        MessageManager msg = plugin.getMessageManager();
+        net.danakube.danarent.model.ActiveContract contract = plugin.getRentalManager().getActiveContractByTenant(player.getUniqueId());
+        if (contract == null) {
+            player.sendMessage(msg.getMessage("rental.no-active-contract"));
+            return;
+        }
+
+        Optional<RentPlot> plotOpt = plugin.getPlotManager().getPlot(contract.getPlotId());
+        if (plotOpt.isEmpty()) {
+            player.sendMessage(msg.getMessage("rental.no-active-contract"));
+            return;
+        }
+
+        RentPlot plot = plotOpt.get();
+        plugin.getEscrowService().cancelRental(contract, plot).thenRun(() -> {
+            plugin.getRentalManager().removeContract(contract.getId());
+            player.teleport(player.getWorld().getSpawnLocation());
+            player.sendMessage(msg.getMessage("rental.cancelled-tenant", Map.of(
+                    "refund", String.format("%.2f", contract.getEscrowBalance()),
+                    "plot_name", plot.getName()
+            )));
+
+            org.bukkit.entity.Player owner = org.bukkit.Bukkit.getPlayer(plot.getOwnerUuid());
+            if (owner != null && owner.isOnline()) {
+                owner.sendMessage(msg.getMessage("rental.cancelled-owner", Map.of(
+                        "plot_name", plot.getName(),
+                        "revenue", String.format("%.2f", plot.getPendingRevenue())
+                )));
+            }
+        });
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            for (String sub : List.of("wand", "create", "delete")) {
+            for (String sub : List.of("wand", "create", "delete", "return", "cancel")) {
                 if (sub.startsWith(args[0].toLowerCase())) {
                     completions.add(sub);
                 }

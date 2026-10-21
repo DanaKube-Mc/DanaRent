@@ -6,6 +6,11 @@ rental:
   expired-tenant: "<prefix><#ffaa00>Votre bail pour le champ <#ffffff><plot_name></#ffffff> est arrivé à expiration."
   cancelled-tenant: "<prefix><#ff5555>Bail résilié. Remboursement au prorata reçu : <#fdba5e><refund> ⛀</#fdba5e>."
   cancelled-owner: "<prefix><#ff5555>Le bail du champ <#ffffff><plot_name></#ffffff> a été résilié. Gains acquis : <#fdba5e><revenue> ⛀</#fdba5e>."
+  no-active-contract: "<prefix><#ff5555>Vous n'avez aucun bail de location actif actuellement.</#ff5555>"
+  returned-to-plot: "<prefix><#55ff55>Vous avez été téléporté sur votre champ <#ffffff><plot_name></#ffffff>.</#55ff55>"
+  cancelled-island-reset: "<prefix><#ff5555>L'île a été réinitialisée. Votre solde séquestré a été intégralement remboursé.</#ff5555>"
+  actionbar-timer: "<b><gradient:#F82F04:#FFEE2E>Temps restant :</gradient> <#ffffff><time_left></#ffffff> <#c0c0c0>|</b> <#fdba5e><plot_name></#fdba5e>"
+
 
 security:
   protected-zone: "<prefix><#ff5555>Cette zone est actuellement louée par <#ffffff><tenant></#ffffff>. Fin du bail dans <#fdba5e><remaining_time></#fdba5e>."

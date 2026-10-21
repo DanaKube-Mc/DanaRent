@@ -35,6 +35,7 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     private net.danakube.danarent.plot.PlotValidator plotValidator;
     private net.danakube.danarent.hook.SkyblockHook skyblockHook;
     private net.danakube.danarent.visual.ParticleVisualizer particleVisualizer;
+    private net.danakube.danarent.rental.RentalManager rentalManager;
 
     public static DanaRentPlugin getInstance() {
         return instance;
@@ -106,6 +107,10 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
             farmCmd.setTabCompleter(fc);
         }
 
+        // 8. Initialisation du gestionnaire de location et tâche périodique 20t
+        this.rentalManager = new net.danakube.danarent.rental.RentalManager(contractRepository);
+        getServer().getScheduler().runTaskTimer(this, new net.danakube.danarent.rental.RentalTimerTask(this), 20L, 20L);
+
         getLogger().info("DanaRent v" + getDescription().getVersion() + " activé avec succès.");
     }
 
@@ -175,6 +180,11 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     @Override
     public net.danakube.danarent.visual.ParticleVisualizer getParticleVisualizer() {
         return particleVisualizer;
+    }
+
+    @Override
+    public net.danakube.danarent.rental.RentalManager getRentalManager() {
+        return rentalManager;
     }
 
     public EconomyHook getEconomyHook() {
