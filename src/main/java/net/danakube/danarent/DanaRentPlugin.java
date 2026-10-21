@@ -30,6 +30,11 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     private ContractRepository contractRepository;
     private EconomyHook economyHook;
     private EscrowService escrowService;
+    private net.danakube.danarent.wand.SelectionManager selectionManager;
+    private net.danakube.danarent.plot.PlotManager plotManager;
+    private net.danakube.danarent.plot.PlotValidator plotValidator;
+    private net.danakube.danarent.hook.SkyblockHook skyblockHook;
+    private net.danakube.danarent.visual.ParticleVisualizer particleVisualizer;
 
     public static DanaRentPlugin getInstance() {
         return instance;
@@ -83,6 +88,24 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
         }
         this.escrowService = new EscrowService(economyHook, plotRepository, contractRepository);
 
+        // 5. Initialisation du gestionnaire de sélection et écouteurs Wand
+        this.selectionManager = new net.danakube.danarent.wand.SelectionManager();
+        getServer().getPluginManager().registerEvents(new net.danakube.danarent.wand.WandListener(this, selectionManager), this);
+
+        // 6. Initialisation de la gestion spatiale, validation et hook Skyblock
+        this.plotManager = new net.danakube.danarent.plot.PlotManager(plotRepository);
+        this.skyblockHook = new net.danakube.danarent.hook.SuperiorSkyblockHook();
+        this.plotValidator = new net.danakube.danarent.plot.PlotValidator(plotManager, skyblockHook, configManager);
+        this.particleVisualizer = new net.danakube.danarent.visual.ParticleVisualizer();
+
+        // 7. Enregistrement des commandes
+        org.bukkit.command.PluginCommand farmCmd = getCommand("farm");
+        if (farmCmd != null) {
+            net.danakube.danarent.command.FarmCommand fc = new net.danakube.danarent.command.FarmCommand(this);
+            farmCmd.setExecutor(fc);
+            farmCmd.setTabCompleter(fc);
+        }
+
         getLogger().info("DanaRent v" + getDescription().getVersion() + " activé avec succès.");
     }
 
@@ -120,6 +143,38 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     @Override
     public EscrowService getEscrowService() {
         return escrowService;
+    }
+
+    @Override
+    public net.danakube.danarent.wand.SelectionManager getSelectionManager() {
+        return selectionManager;
+    }
+
+    @Override
+    public net.danakube.danarent.plot.PlotManager getPlotManager() {
+        return plotManager;
+    }
+
+    @Override
+    public net.danakube.danarent.plot.PlotValidator getPlotValidator() {
+        return plotValidator;
+    }
+
+    @Override
+    public net.danakube.danarent.hook.SkyblockHook getSkyblockHook() {
+        return skyblockHook;
+    }
+
+    public void setSkyblockHook(net.danakube.danarent.hook.SkyblockHook skyblockHook) {
+        this.skyblockHook = skyblockHook;
+        if (plotManager != null && configManager != null) {
+            this.plotValidator = new net.danakube.danarent.plot.PlotValidator(plotManager, skyblockHook, configManager);
+        }
+    }
+
+    @Override
+    public net.danakube.danarent.visual.ParticleVisualizer getParticleVisualizer() {
+        return particleVisualizer;
     }
 
     public EconomyHook getEconomyHook() {

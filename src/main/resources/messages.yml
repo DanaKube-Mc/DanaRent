@@ -16,3 +16,22 @@ economy:
   funds-collected: "<prefix><#55ff55>Vous avez collecté <#fdba5e><amount> ⛀</#fdba5e> de vos locations."
   no-funds: "<prefix><#ff5555>Vous n'avez aucun revenu en attente de collecte."
   insufficient-funds: "<prefix><#ff5555>Solde insuffisant pour louer ce champ (<#fdba5e><price> ⛀</#fdba5e> requis)."
+
+wand:
+  given: "<prefix><#55ff55>Vous avez reçu la baguette de sélection.</#55ff55>"
+  point-1-set: "<prefix><#55ff55>Point 1 défini en : <#fdba5e>X:<x> Y:<y> Z:<z></#fdba5e>"
+  point-2-set: "<prefix><#55ff55>Point 2 défini en : <#fdba5e>X:<x> Y:<y> Z:<z></#fdba5e> <#c0c0c0>(Volume: <#fdba5e><volume> blocs</#fdba5e>)</#c0c0c0>"
+
+plots:
+  error-no-selection: "<prefix><#ff5555>Veuillez d'abord définir les deux coins avec votre baguette (/farm wand).</#ff5555>"
+  error-different-worlds: "<prefix><#ff5555>Les deux points doivent être situés dans le même monde.</#ff5555>"
+  error-no-island: "<prefix><#ff5555>Vous ne possédez pas d'île sur ce serveur.</#ff5555>"
+  error-not-owner: "<prefix><#ff5555>Seul le propriétaire ou un administrateur d'île peut créer un champ.</#ff5555>"
+  error-outside-island: "<prefix><#ff5555>La parcelle dépasse les frontières autorisées de votre île.</#ff5555>"
+  error-overlapping: "<prefix><#ff5555>Cette zone chevauche un champ déjà existant.</#ff5555>"
+  error-limit-reached: "<prefix><#ff5555>Vous avez atteint la limite maximale de champs autorisés (<max>).</#ff5555>"
+  created-success: "<prefix><#55ff55>Le champ <#ffffff><plot_name></#ffffff> a été créé avec succès !</#55ff55>"
+  deleted-success: "<prefix><#55ff55>Le champ <#ffffff><plot_name></#ffffff> a été supprimé.</#55ff55>"
+  error-has-active-contract: "<prefix><#ff5555>Impossible de supprimer ce champ car un bail de location est actuellement en cours.</#ff5555>"
+  error-not-found: "<prefix><#ff5555>Aucun champ trouvé sous le nom <#ffffff><plot_name></#ffffff>.</#ff5555>"
+
