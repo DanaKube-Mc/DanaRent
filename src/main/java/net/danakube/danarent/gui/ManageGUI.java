@@ -112,6 +112,11 @@ public class ManageGUI extends AbstractGUI {
         setItem(slot, chestItem, event -> {
             plugin.getEscrowService().collectPendingRevenue(owner.getUniqueId()).thenAccept(collected -> {
                 if (collected > 0) {
+                    for (RentPlot p : plugin.getPlotManager().getAllPlots()) {
+                        if (p.getOwnerUuid().equals(owner.getUniqueId())) {
+                            p.setPendingRevenue(0.0);
+                        }
+                    }
                     owner.sendMessage(plugin.getMessageManager().getMessage("economy.funds-collected",
                             Map.of("amount", String.format("%.2f", collected))));
                 } else {

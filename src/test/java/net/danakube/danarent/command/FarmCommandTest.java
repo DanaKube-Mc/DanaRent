@@ -148,12 +148,22 @@ class FarmCommandTest {
     }
 
     @Test
-    @DisplayName("Devrait proposer les sous-commandes via l'auto-complétion (TabCompleter)")
+    @DisplayName("Devrait proposer les sous-commandes via l'auto-complétion (TabCompleter) selon les permissions")
     void shouldProvideTabCompletions() {
-        PlayerMock player = server.addPlayer();
-        player.addAttachment(plugin, "danarent.owner", true);
+        PlayerMock user = server.addPlayer();
+        user.addAttachment(plugin, "danarent.use", true);
 
-        List<String> completions = server.getCommandTabComplete(player, "farm ");
-        assertThat(completions).contains("wand", "create", "delete");
+        List<String> userCompletions = server.getCommandTabComplete(user, "farm ");
+        assertThat(userCompletions).contains("list", "return", "cancel");
+        assertThat(userCompletions).doesNotContain("wand", "create", "delete", "manage");
+
+        PlayerMock owner = server.addPlayer();
+        owner.addAttachment(plugin, "danarent.owner", true);
+
+        List<String> ownerCompletions = server.getCommandTabComplete(owner, "farm ");
+        assertThat(ownerCompletions).contains("wand", "create", "delete", "manage", "list", "return", "cancel");
+
+        List<String> createCompletions = server.getCommandTabComplete(owner, "farm create ");
+        assertThat(createCompletions).containsExactly("<nom_du_champ>");
     }
 }

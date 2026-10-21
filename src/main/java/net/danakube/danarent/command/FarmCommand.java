@@ -224,7 +224,20 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            for (String sub : List.of("list", "manage", "wand", "create", "delete", "return", "cancel")) {
+            List<String> allowed = new ArrayList<>();
+            if (sender.hasPermission("danarent.use")) {
+                allowed.add("list");
+                allowed.add("return");
+                allowed.add("cancel");
+            }
+            if (sender.hasPermission("danarent.owner")) {
+                allowed.add("manage");
+                allowed.add("wand");
+                allowed.add("create");
+                allowed.add("delete");
+            }
+
+            for (String sub : allowed) {
                 if (sub.startsWith(args[0].toLowerCase())) {
                     completions.add(sub);
                 }
@@ -233,6 +246,7 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("delete") && sender instanceof Player player) {
+            if (!sender.hasPermission("danarent.owner")) return Collections.emptyList();
             for (RentPlot plot : plugin.getPlotManager().getAllPlots()) {
                 if (plot.getOwnerUuid().equals(player.getUniqueId())) {
                     if (plot.getName().toLowerCase().startsWith(args[1].toLowerCase())) {
@@ -243,7 +257,13 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
             return completions;
         }
 
+        if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
+            if (!sender.hasPermission("danarent.owner")) return Collections.emptyList();
+            return List.of("<nom_du_champ>");
+        }
+
         if (args.length == 3 && args[0].equalsIgnoreCase("create")) {
+            if (!sender.hasPermission("danarent.owner")) return Collections.emptyList();
             for (String type : List.of("farm", "mining")) {
                 if (type.startsWith(args[2].toLowerCase())) {
                     completions.add(type);
