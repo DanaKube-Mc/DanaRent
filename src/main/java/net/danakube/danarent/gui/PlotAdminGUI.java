@@ -110,7 +110,14 @@ public class PlotAdminGUI extends AbstractGUI {
                 config.getString("buttons.toggle_type.name", "Type"),
                 config.getStringList("buttons.toggle_type.lore"), placeholders, false);
         setItem(typeSlot, typeItem, event -> {
-            plot.setPlotType(plot.getPlotType() == PlotType.FARM ? PlotType.MINING : PlotType.FARM);
+            PlotType newType = plot.getPlotType() == PlotType.FARM ? PlotType.MINING : PlotType.FARM;
+            if (!plugin.getConfigManager().isTypeEnabled(newType)) {
+                owner.sendMessage(plugin.getMessageManager().getMessage("types.type-disabled", Map.of(
+                        "type", newType.name()
+                )));
+                return;
+            }
+            plot.setPlotType(newType);
             plugin.getPlotRepository().save(plot);
             new PlotAdminGUI(plugin, owner, plot).open(owner);
         });

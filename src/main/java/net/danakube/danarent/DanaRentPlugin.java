@@ -88,7 +88,7 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
         } else {
             getLogger().warning("Vault Economy non disponible au démarrage de DanaRent. Les fonctionnalités financières attendront son chargement.");
         }
-        this.escrowService = new EscrowService(economyHook, plotRepository, contractRepository);
+        this.escrowService = new EscrowService(economyHook, plotRepository, contractRepository, configManager);
 
         // 5. Initialisation du gestionnaire de sélection et écouteurs Wand
         this.selectionManager = new net.danakube.danarent.wand.SelectionManager();
@@ -217,7 +217,7 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     public void setEconomyHook(EconomyHook economyHook) {
         this.economyHook = economyHook;
         if (plotRepository != null && contractRepository != null) {
-            this.escrowService = new EscrowService(economyHook, plotRepository, contractRepository);
+            this.escrowService = new EscrowService(economyHook, plotRepository, contractRepository, configManager);
         }
     }
 
@@ -229,6 +229,9 @@ public class DanaRentPlugin extends JavaPlugin implements DanaRentAPI {
     public void reloadPlugin() {
         reloadConfig();
         this.configManager = new ConfigManager(getConfig());
+        if (this.escrowService != null) {
+            this.escrowService.setConfigManager(configManager);
+        }
 
         File messagesFile = new File(getDataFolder(), "messages.yml");
         if (!messagesFile.exists()) {
