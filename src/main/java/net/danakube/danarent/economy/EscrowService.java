@@ -16,14 +16,26 @@ import java.util.concurrent.CompletableFuture;
 
 public class EscrowService {
 
+    public static final UUID SERVER_SINK_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
     private final EconomyHook economyHook;
     private final PlotRepository plotRepository;
     private final ContractRepository contractRepository;
+    private net.danakube.danarent.config.ConfigManager configManager;
 
     public EscrowService(EconomyHook economyHook, PlotRepository plotRepository, ContractRepository contractRepository) {
+        this(economyHook, plotRepository, contractRepository, null);
+    }
+
+    public EscrowService(EconomyHook economyHook, PlotRepository plotRepository, ContractRepository contractRepository, net.danakube.danarent.config.ConfigManager configManager) {
         this.economyHook = economyHook;
         this.plotRepository = plotRepository;
         this.contractRepository = contractRepository;
+        this.configManager = configManager;
+    }
+
+    public void setConfigManager(net.danakube.danarent.config.ConfigManager configManager) {
+        this.configManager = configManager;
     }
 
     public CompletableFuture<ActiveContract> startRental(UUID tenantUuid, RentPlot plot) {
@@ -92,8 +104,12 @@ public class EscrowService {
             double consumptionRatio = (double) elapsedSec / (double) totalDurationSec;
 
             double initialPrice = contract.getInitialPrice();
-            double refundTenant = round(initialPrice * (1.0 - consumptionRatio));
-            double ownerRevenue = round(initialPrice * consumptionRatio);
+            double grossConsumed = initialPrice * consumptionRatio;
+            double refundTenant = round(initialPrice - grossConsumed);
+
+            double taxRate = configManager != null ? configManager.getTaxPercentage() : 0.0;
+            double serverTax = round(grossConsumed * (taxRate / 100.0));
+            double ownerRevenue = round(grossConsumed - serverTax);
 
             if (refundTenant > 0) {
                 economyHook.deposit(contract.getTenantUuid(), refundTenant);
@@ -122,6 +138,14 @@ public class EscrowService {
                     );
                     contractRepository.logTransaction(payoutLog).get();
                 }
+
+                if (serverTax > 0) {
+                    TransactionLog taxLog = new TransactionLog(
+                            0, contract.getId(), contract.getTenantUuid(), SERVER_SINK_UUID,
+                            serverTax, TransactionType.SERVER_TAX, now
+                    );
+                    contractRepository.logTransaction(taxLog).get();
+                }
             } catch (Exception e) {
                 throw new RuntimeException("Erreur lors de la résiliation au prorata", e);
             }
@@ -136,7 +160,11 @@ public class EscrowService {
 
             long now = System.currentTimeMillis();
             double remainingEscrow = contract.getEscrowBalance();
-            plot.addPendingRevenue(remainingEscrow);
+            double taxRate = configManager != null ? configManager.getTaxPercentage() : 0.0;
+            double serverTax = round(remainingEscrow * (taxRate / 100.0));
+            double ownerRevenue = round(remainingEscrow - serverTax);
+
+            plot.addPendingRevenue(ownerRevenue);
 
             contract.setEscrowBalance(0.0);
             contract.setStatus(ContractStatus.COMPLETED);
@@ -145,12 +173,20 @@ public class EscrowService {
                 contractRepository.save(contract).get();
                 plotRepository.save(plot).get();
 
-                if (remainingEscrow > 0) {
+                if (ownerRevenue > 0) {
                     TransactionLog log = new TransactionLog(
                             0, contract.getId(), contract.getTenantUuid(), plot.getOwnerUuid(),
-                            remainingEscrow, TransactionType.OWNER_PAYOUT, now
+                            ownerRevenue, TransactionType.OWNER_PAYOUT, now
                     );
                     contractRepository.logTransaction(log).get();
+                }
+
+                if (serverTax > 0) {
+                    TransactionLog taxLog = new TransactionLog(
+                            0, contract.getId(), contract.getTenantUuid(), SERVER_SINK_UUID,
+                            serverTax, TransactionType.SERVER_TAX, now
+                    );
+                    contractRepository.logTransaction(taxLog).get();
                 }
             } catch (Exception e) {
                 throw new RuntimeException("Erreur lors de la clôture du bail", e);
