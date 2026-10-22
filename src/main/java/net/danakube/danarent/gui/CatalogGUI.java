@@ -153,6 +153,16 @@ public class CatalogGUI extends AbstractGUI {
                 ? "<#ffaa00>Loué (" + RentalTimerTask.formatDuration(activeContract.getRemainingSeconds()) + ")</#ffaa00>"
                 : "<#55ff55>Disponible</#55ff55>";
 
+        List<String> cardLore = new ArrayList<>(lore);
+        if (!plugin.getConfigManager().isTypeEnabled(plot.getPlotType())) {
+            statusColored = "<#ff5555>Suspendu (Désactivé)</#ff5555>";
+            for (int i = 0; i < cardLore.size(); i++) {
+                if (cardLore.get(i).contains("Clic gauche")) {
+                    cardLore.set(i, plugin.getMessageManager().getRawMessage("types.type-suspended-lore"));
+                }
+            }
+        }
+
         Map<String, String> placeholders = Map.of(
                 "plot_name", plot.getName(),
                 "owner_name", ownerName,
@@ -166,7 +176,7 @@ public class CatalogGUI extends AbstractGUI {
                 "status_colored", statusColored
         );
 
-        return gm.buildItem(mat, name, lore, placeholders, false);
+        return gm.buildItem(mat, name, cardLore, placeholders, false);
     }
 
     private void handlePlotClick(ClickType clickType, RentPlot plot) {
@@ -188,8 +198,20 @@ public class CatalogGUI extends AbstractGUI {
 
         if (clickType == ClickType.LEFT) {
             // Clic Gauche : Louer immédiatement
-            if (plugin.getRentalManager().getActiveContractByTenant(viewer.getUniqueId()) != null) {
-                viewer.sendMessage(plugin.getMessageManager().getMessage("rental.already-renting"));
+            if (!plugin.getConfigManager().isTypeEnabled(plot.getPlotType())) {
+                viewer.sendMessage(plugin.getMessageManager().getMessage("types.type-disabled", Map.of(
+                        "type", plot.getPlotType().name()
+                )));
+                return;
+            }
+
+            int activeRentals = plugin.getRentalManager().getActiveRentalCount(viewer.getUniqueId());
+            int maxRentals = net.danakube.danarent.util.LimitResolver.getMaxActiveRentals(plugin, viewer);
+            if (activeRentals >= maxRentals) {
+                viewer.sendMessage(plugin.getMessageManager().getMessage("limits.rental-reached", Map.of(
+                        "current", String.valueOf(activeRentals),
+                        "max", String.valueOf(maxRentals)
+                )));
                 return;
             }
 

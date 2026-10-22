@@ -5,7 +5,9 @@ import net.danakube.danarent.model.ActiveContract;
 import net.danakube.danarent.model.ContractStatus;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,7 +17,7 @@ public class RentalManager {
     private final ContractRepository contractRepository;
     private final Map<Integer, ActiveContract> contractsById = new ConcurrentHashMap<>();
     private final Map<Integer, ActiveContract> contractsByPlotId = new ConcurrentHashMap<>();
-    private final Map<UUID, ActiveContract> contractsByTenant = new ConcurrentHashMap<>();
+    private final Map<UUID, Set<ActiveContract>> contractsByTenant = new ConcurrentHashMap<>();
 
     public RentalManager(ContractRepository contractRepository) {
         this.contractRepository = contractRepository;
@@ -25,7 +27,7 @@ public class RentalManager {
         if (contract != null && contract.getStatus() == ContractStatus.ACTIVE) {
             contractsById.put(contract.getId(), contract);
             contractsByPlotId.put(contract.getPlotId(), contract);
-            contractsByTenant.put(contract.getTenantUuid(), contract);
+            contractsByTenant.computeIfAbsent(contract.getTenantUuid(), k -> ConcurrentHashMap.newKeySet()).add(contract);
         }
     }
 
@@ -33,7 +35,13 @@ public class RentalManager {
         ActiveContract removed = contractsById.remove(contractId);
         if (removed != null) {
             contractsByPlotId.remove(removed.getPlotId());
-            contractsByTenant.remove(removed.getTenantUuid());
+            Set<ActiveContract> tenantContracts = contractsByTenant.get(removed.getTenantUuid());
+            if (tenantContracts != null) {
+                tenantContracts.remove(removed);
+                if (tenantContracts.isEmpty()) {
+                    contractsByTenant.remove(removed.getTenantUuid());
+                }
+            }
         }
     }
 
@@ -43,7 +51,20 @@ public class RentalManager {
 
     public ActiveContract getActiveContractByTenant(UUID tenantUuid) {
         if (tenantUuid == null) return null;
-        return contractsByTenant.get(tenantUuid);
+        Set<ActiveContract> tenantContracts = contractsByTenant.get(tenantUuid);
+        if (tenantContracts == null || tenantContracts.isEmpty()) return null;
+        return tenantContracts.iterator().next();
+    }
+
+    public Set<ActiveContract> getActiveContractsByTenant(UUID tenantUuid) {
+        if (tenantUuid == null) return Collections.emptySet();
+        return contractsByTenant.getOrDefault(tenantUuid, Collections.emptySet());
+    }
+
+    public int getActiveRentalCount(UUID tenantUuid) {
+        if (tenantUuid == null) return 0;
+        Set<ActiveContract> tenantContracts = contractsByTenant.get(tenantUuid);
+        return tenantContracts != null ? tenantContracts.size() : 0;
     }
 
     public ActiveContract getContract(int contractId) {

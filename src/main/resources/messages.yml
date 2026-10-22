@@ -23,6 +23,16 @@ economy:
   funds-collected: "<prefix><#55ff55>Vous avez collecté <#fdba5e><amount> ⛀</#fdba5e> de vos locations."
   no-funds: "<prefix><#ff5555>Vous n'avez aucun revenu en attente de collecte."
   insufficient-funds: "<prefix><#ff5555>Solde insuffisant pour louer ce champ (<#fdba5e><price> ⛀</#fdba5e> requis)."
+  tax-info: "<#808080>Taxe serveur (<tax_rate>%) : <#ff5555>-<tax_amount> ⛀</#ff5555>"
+  payout-with-tax: "<prefix><#55ff55>Location terminée. Vous recevez <#fdba5e><net_amount> ⛀</#fdba5e> <#808080>(Taxe déduite : <tax_amount> ⛀)</#808080>."
+
+limits:
+  creation-reached: "<prefix><#ff5555>Vous avez atteint la limite de parcelles créées pour votre île (<#fdba5e><current>/<max></#fdba5e>)."
+  rental-reached: "<prefix><#ff5555>Vous avez déjà atteint votre limite de baux simultanés (<#fdba5e><current>/<max></#fdba5e>)."
+
+types:
+  type-disabled: "<prefix><#ff5555>Le type de parcelle <#fdba5e><type></#fdba5e> est actuellement désactivé sur le serveur."
+  type-suspended-lore: "<#ff5555>Ce type de location est temporairement suspendu par le serveur."
 
 wand:
   given: "<prefix><#55ff55>Vous avez reçu la baguette de sélection.</#55ff55>"
