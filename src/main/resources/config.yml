@@ -1,9 +1,39 @@
-# Configuration principale DanaRent
+# =============================================================
+#           Configuration Générale - DanaRent
+# =============================================================
+
 database:
   file: "data.db"
   pool:
     maximum-pool-size: 5
     connection-timeout: 30000
+
+# Activation modulaire des types de parcelles
+types:
+  farm:
+    enabled: true
+  mining:
+    enabled: true
+
+# Économie & Régulation financière
+economy:
+  currency-symbol: "⛀"
+  tax:
+    # Pourcentage prélevé sur les gains bruts du propriétaire (0.0 pour désactiver)
+    percentage: 10.0
+    # Mode Option A : Destruction pure de la monnaie (Money sink serveur)
+    mode: "MONEY_SINK"
+
+# Quotas de création et de location
+limits:
+  creation:
+    # Nombre de parcelles maximales créées par défaut par île
+    default: 3
+  active-rentals:
+    # Nombre maximal de baux qu'un locataire peut avoir actifs en même temps
+    default: 1
+  # Rétro-compatibilité
+  default-plots-per-island: 3
 
 settings:
   # Monnaie affichée dans les textes
@@ -14,10 +44,6 @@ settings:
   particles:
     warning-color: "#FFA500" # Orange lors de l'approche du buffer
     border-color: "#00FF00"  # Vert pour marquer le champ
-
-limits:
-  default-plots-per-island: 3
-  # Les limites par grade s'obtiennent via permissions LuckPerms: danarent.limit.<nombre>
 
 wand:
   material: "GOLDEN_HOE"

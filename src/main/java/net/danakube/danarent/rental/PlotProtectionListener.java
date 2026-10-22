@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Optional;
+import java.util.Set;
 
 public class PlotProtectionListener implements Listener {
 
@@ -110,20 +111,24 @@ public class PlotProtectionListener implements Listener {
         }
 
         Player player = event.getPlayer();
-        ActiveContract contract = plugin.getRentalManager().getActiveContractByTenant(player.getUniqueId());
-        if (contract == null) {
+        Set<ActiveContract> contracts = plugin.getRentalManager().getActiveContractsByTenant(player.getUniqueId());
+        if (contracts.isEmpty()) {
             return;
         }
 
-        RentPlot plot = plugin.getPlotManager().getPlot(contract.getPlotId()).orElse(null);
-        if (plot == null) {
-            return;
-        }
-
-        Cuboid bufferCuboid = plot.getCuboid().expand(1.0);
-        if (event.getTo() != null && !bufferCuboid.contains(event.getTo())) {
-            event.setCancelled(true);
-            player.sendMessage(plugin.getMessageManager().getMessage("security.boundary-warning"));
+        if (event.getTo() != null) {
+            boolean insideAnyBuffer = false;
+            for (ActiveContract contract : contracts) {
+                RentPlot plot = plugin.getPlotManager().getPlot(contract.getPlotId()).orElse(null);
+                if (plot != null && plot.getCuboid().expand(1.0).contains(event.getTo())) {
+                    insideAnyBuffer = true;
+                    break;
+                }
+            }
+            if (!insideAnyBuffer) {
+                event.setCancelled(true);
+                player.sendMessage(plugin.getMessageManager().getMessage("security.boundary-warning"));
+            }
         }
     }
 }

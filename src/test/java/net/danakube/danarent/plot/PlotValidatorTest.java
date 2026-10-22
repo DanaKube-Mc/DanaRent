@@ -129,7 +129,7 @@ class PlotValidatorTest {
         ValidationResult result = validator.validate(player, "P4", cuboid);
 
         assertThat(result.isValid()).isFalse();
-        assertThat(result.getMessageKey()).isEqualTo("plots.error-limit-reached");
+        assertThat(result.getMessageKey()).isEqualTo("limits.creation-reached");
     }
 
     @Test
@@ -141,8 +141,8 @@ class PlotValidatorTest {
 
         Player p2 = mock(Player.class);
         Set<PermissionAttachmentInfo> perms = new HashSet<>();
-        perms.add(new PermissionAttachmentInfo(p2, "danarent.limit.2", null, true));
-        perms.add(new PermissionAttachmentInfo(p2, "danarent.limit.7", null, true));
+        perms.add(new PermissionAttachmentInfo(p2, "danarent.limit.create.2", null, true));
+        perms.add(new PermissionAttachmentInfo(p2, "danarent.limit.create.7", null, true));
         when(p2.getEffectivePermissions()).thenReturn(perms);
         assertThat(validator.getMaxPlotsAllowed(p2)).isEqualTo(7);
 

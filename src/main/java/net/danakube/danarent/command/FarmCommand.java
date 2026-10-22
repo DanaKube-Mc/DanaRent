@@ -59,8 +59,8 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
             case "wand" -> handleWand(player);
             case "create" -> handleCreate(player, args);
             case "delete" -> handleDelete(player, args);
-            case "return" -> handleReturn(player);
-            case "cancel" -> handleCancel(player);
+            case "return" -> handleReturn(player, args);
+            case "cancel" -> handleCancel(player, args);
             default -> player.sendMessage(msg.getMessage("wand.given"));
         }
 
@@ -116,6 +116,11 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
             plotType = PlotType.MINING;
         }
 
+        if (!plugin.getConfigManager().isTypeEnabled(plotType)) {
+            player.sendMessage(msg.getMessage("types.type-disabled", Map.of("type", plotType.name())));
+            return;
+        }
+
         String islandId = plugin.getSkyblockHook().getIslandId(player);
         RentPlot plot = new RentPlot(
                 0, player.getUniqueId(), islandId, plotName, plotType,
@@ -168,15 +173,44 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
         });
     }
 
-    private void handleReturn(Player player) {
+    private void handleReturn(Player player, String[] args) {
         MessageManager msg = plugin.getMessageManager();
-        net.danakube.danarent.model.ActiveContract contract = plugin.getRentalManager().getActiveContractByTenant(player.getUniqueId());
-        if (contract == null) {
+        Set<net.danakube.danarent.model.ActiveContract> contracts = plugin.getRentalManager().getActiveContractsByTenant(player.getUniqueId());
+        if (contracts.isEmpty()) {
             player.sendMessage(msg.getMessage("rental.no-active-contract"));
             return;
         }
 
-        Optional<RentPlot> plotOpt = plugin.getPlotManager().getPlot(contract.getPlotId());
+        net.danakube.danarent.model.ActiveContract targetContract = null;
+        if (args.length >= 2) {
+            String targetName = args[1];
+            for (net.danakube.danarent.model.ActiveContract c : contracts) {
+                Optional<RentPlot> pOpt = plugin.getPlotManager().getPlot(c.getPlotId());
+                if (pOpt.isPresent() && pOpt.get().getName().equalsIgnoreCase(targetName)) {
+                    targetContract = c;
+                    break;
+                }
+            }
+        } else {
+            // Si le joueur est dans une de ses parcelles, choisir celle-ci
+            for (net.danakube.danarent.model.ActiveContract c : contracts) {
+                Optional<RentPlot> pOpt = plugin.getPlotManager().getPlot(c.getPlotId());
+                if (pOpt.isPresent() && pOpt.get().getCuboid().contains(player.getLocation())) {
+                    targetContract = c;
+                    break;
+                }
+            }
+            if (targetContract == null) {
+                targetContract = contracts.iterator().next();
+            }
+        }
+
+        if (targetContract == null) {
+            player.sendMessage(msg.getMessage("rental.no-active-contract"));
+            return;
+        }
+
+        Optional<RentPlot> plotOpt = plugin.getPlotManager().getPlot(targetContract.getPlotId());
         if (plotOpt.isEmpty()) {
             player.sendMessage(msg.getMessage("rental.no-active-contract"));
             return;
@@ -187,26 +221,55 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
         player.sendMessage(msg.getMessage("rental.returned-to-plot", Map.of("plot_name", plot.getName())));
     }
 
-    private void handleCancel(Player player) {
+    private void handleCancel(Player player, String[] args) {
         MessageManager msg = plugin.getMessageManager();
-        net.danakube.danarent.model.ActiveContract contract = plugin.getRentalManager().getActiveContractByTenant(player.getUniqueId());
-        if (contract == null) {
+        Set<net.danakube.danarent.model.ActiveContract> contracts = plugin.getRentalManager().getActiveContractsByTenant(player.getUniqueId());
+        if (contracts.isEmpty()) {
             player.sendMessage(msg.getMessage("rental.no-active-contract"));
             return;
         }
 
-        Optional<RentPlot> plotOpt = plugin.getPlotManager().getPlot(contract.getPlotId());
+        net.danakube.danarent.model.ActiveContract targetContract = null;
+        if (args.length >= 2) {
+            String targetName = args[1];
+            for (net.danakube.danarent.model.ActiveContract c : contracts) {
+                Optional<RentPlot> pOpt = plugin.getPlotManager().getPlot(c.getPlotId());
+                if (pOpt.isPresent() && pOpt.get().getName().equalsIgnoreCase(targetName)) {
+                    targetContract = c;
+                    break;
+                }
+            }
+        } else {
+            for (net.danakube.danarent.model.ActiveContract c : contracts) {
+                Optional<RentPlot> pOpt = plugin.getPlotManager().getPlot(c.getPlotId());
+                if (pOpt.isPresent() && pOpt.get().getCuboid().contains(player.getLocation())) {
+                    targetContract = c;
+                    break;
+                }
+            }
+            if (targetContract == null) {
+                targetContract = contracts.iterator().next();
+            }
+        }
+
+        if (targetContract == null) {
+            player.sendMessage(msg.getMessage("rental.no-active-contract"));
+            return;
+        }
+
+        final net.danakube.danarent.model.ActiveContract contractToCancel = targetContract;
+        Optional<RentPlot> plotOpt = plugin.getPlotManager().getPlot(contractToCancel.getPlotId());
         if (plotOpt.isEmpty()) {
             player.sendMessage(msg.getMessage("rental.no-active-contract"));
             return;
         }
 
         RentPlot plot = plotOpt.get();
-        plugin.getEscrowService().cancelRental(contract, plot).thenRun(() -> {
-            plugin.getRentalManager().removeContract(contract.getId());
+        plugin.getEscrowService().cancelRental(contractToCancel, plot).thenRun(() -> {
+            plugin.getRentalManager().removeContract(contractToCancel.getId());
             player.teleport(player.getWorld().getSpawnLocation());
             player.sendMessage(msg.getMessage("rental.cancelled-tenant", Map.of(
-                    "refund", String.format("%.2f", contract.getEscrowBalance()),
+                    "refund", String.format("%.2f", contractToCancel.getEscrowBalance()),
                     "plot_name", plot.getName()
             )));
 
@@ -257,6 +320,17 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
             return completions;
         }
 
+        if (args.length == 2 && (args[0].equalsIgnoreCase("return") || args[0].equalsIgnoreCase("cancel")) && sender instanceof Player player) {
+            if (!sender.hasPermission("danarent.use")) return Collections.emptyList();
+            for (net.danakube.danarent.model.ActiveContract c : plugin.getRentalManager().getActiveContractsByTenant(player.getUniqueId())) {
+                Optional<RentPlot> plotOpt = plugin.getPlotManager().getPlot(c.getPlotId());
+                if (plotOpt.isPresent() && plotOpt.get().getName().toLowerCase().startsWith(args[1].toLowerCase())) {
+                    completions.add(plotOpt.get().getName());
+                }
+            }
+            return completions;
+        }
+
         if (args.length == 2 && args[0].equalsIgnoreCase("create")) {
             if (!sender.hasPermission("danarent.owner")) return Collections.emptyList();
             return List.of("<nom_du_champ>");
@@ -264,9 +338,12 @@ public class FarmCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 3 && args[0].equalsIgnoreCase("create")) {
             if (!sender.hasPermission("danarent.owner")) return Collections.emptyList();
-            for (String type : List.of("farm", "mining")) {
-                if (type.startsWith(args[2].toLowerCase())) {
-                    completions.add(type);
+            for (PlotType type : PlotType.values()) {
+                if (plugin.getConfigManager().isTypeEnabled(type)) {
+                    String name = type.name().toLowerCase();
+                    if (name.startsWith(args[2].toLowerCase())) {
+                        completions.add(name);
+                    }
                 }
             }
             return completions;
