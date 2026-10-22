@@ -14,6 +14,14 @@ public class ConfigManager {
     private String borderColorHex;
 
     private int defaultPlotsPerIsland;
+    private int defaultCreationLimit;
+    private int defaultActiveRentalsLimit;
+
+    private boolean farmEnabled;
+    private boolean miningEnabled;
+
+    private double taxPercentage;
+    private String taxMode;
 
     private String wandMaterial;
     private String wandName;
@@ -34,12 +42,20 @@ public class ConfigManager {
         this.maxPoolSize = config.getInt("database.pool.maximum-pool-size", 5);
         this.connectionTimeout = config.getLong("database.pool.connection-timeout", 30000L);
 
-        this.currencySymbol = config.getString("settings.currency-symbol", "⛀");
+        this.currencySymbol = config.getString("economy.currency-symbol", config.getString("settings.currency-symbol", "⛀"));
         this.boundaryBuffer = config.getDouble("settings.boundary-buffer", 1.0);
         this.warningColorHex = config.getString("settings.particles.warning-color", "#FFA500");
         this.borderColorHex = config.getString("settings.particles.border-color", "#00FF00");
 
-        this.defaultPlotsPerIsland = config.getInt("limits.default-plots-per-island", 3);
+        this.farmEnabled = config.getBoolean("types.farm.enabled", true);
+        this.miningEnabled = config.getBoolean("types.mining.enabled", true);
+
+        this.taxPercentage = config.getDouble("economy.tax.percentage", 10.0);
+        this.taxMode = config.getString("economy.tax.mode", "MONEY_SINK");
+
+        this.defaultCreationLimit = config.getInt("limits.creation.default", config.getInt("limits.default-plots-per-island", 3));
+        this.defaultActiveRentalsLimit = config.getInt("limits.active-rentals.default", 1);
+        this.defaultPlotsPerIsland = this.defaultCreationLimit;
 
         this.wandMaterial = config.getString("wand.material", "GOLDEN_HOE");
         this.wandName = config.getString("wand.name", "<b><gradient:#F82F04:#FFEE2E>Baguette de Sélection</gradient></b>");
@@ -55,6 +71,15 @@ public class ConfigManager {
         this.boundaryBuffer = 1.0;
         this.warningColorHex = "#FFA500";
         this.borderColorHex = "#00FF00";
+
+        this.farmEnabled = true;
+        this.miningEnabled = true;
+
+        this.taxPercentage = 10.0;
+        this.taxMode = "MONEY_SINK";
+
+        this.defaultCreationLimit = 3;
+        this.defaultActiveRentalsLimit = 1;
         this.defaultPlotsPerIsland = 3;
 
         this.wandMaterial = "GOLDEN_HOE";
@@ -113,5 +138,37 @@ public class ConfigManager {
 
     public int getDefaultPlotsPerIsland() {
         return defaultPlotsPerIsland;
+    }
+
+    public int getDefaultCreationLimit() {
+        return defaultCreationLimit;
+    }
+
+    public int getDefaultActiveRentalsLimit() {
+        return defaultActiveRentalsLimit;
+    }
+
+    public boolean isFarmEnabled() {
+        return farmEnabled;
+    }
+
+    public boolean isMiningEnabled() {
+        return miningEnabled;
+    }
+
+    public boolean isTypeEnabled(net.danakube.danarent.model.PlotType type) {
+        if (type == null) return false;
+        return switch (type) {
+            case FARM -> farmEnabled;
+            case MINING -> miningEnabled;
+        };
+    }
+
+    public double getTaxPercentage() {
+        return taxPercentage;
+    }
+
+    public String getTaxMode() {
+        return taxMode;
     }
 }

@@ -13,11 +13,17 @@ public class PlotValidator {
     private final PlotManager plotManager;
     private final SkyblockHook skyblockHook;
     private final ConfigManager configManager;
+    private final org.bukkit.plugin.Plugin plugin;
 
     public PlotValidator(PlotManager plotManager, SkyblockHook skyblockHook, ConfigManager configManager) {
+        this(plotManager, skyblockHook, configManager, null);
+    }
+
+    public PlotValidator(PlotManager plotManager, SkyblockHook skyblockHook, ConfigManager configManager, org.bukkit.plugin.Plugin plugin) {
         this.plotManager = plotManager;
         this.skyblockHook = skyblockHook;
         this.configManager = configManager;
+        this.plugin = plugin;
     }
 
     public ValidationResult validate(Player player, String name, Cuboid cuboid) {
@@ -39,29 +45,39 @@ public class PlotValidator {
         }
 
         int maxAllowed = getMaxPlotsAllowed(player);
-        if (plotManager.getPlotCountForIsland(islandId) >= maxAllowed) {
-            return ValidationResult.error("plots.error-limit-reached", Map.of("max", String.valueOf(maxAllowed)));
+        int currentCount = plotManager.getPlotCountForIsland(islandId);
+        if (currentCount >= maxAllowed) {
+            return ValidationResult.error("limits.creation-reached", Map.of(
+                    "current", String.valueOf(currentCount),
+                    "max", String.valueOf(maxAllowed)
+            ));
         }
 
         return ValidationResult.success();
     }
 
     public int getMaxPlotsAllowed(Player player) {
-        if (player.hasPermission("danarent.admin") || player.hasPermission("danarent.limit.unlimited")) {
+        if (player.hasPermission("danarent.admin") || player.hasPermission("danarent.limit.create.unlimited") || player.hasPermission("danarent.limit.unlimited")) {
             return Integer.MAX_VALUE;
         }
 
-        int max = configManager.getDefaultPlotsPerIsland();
+        int defaultMax = configManager != null ? configManager.getDefaultCreationLimit() : 3;
+        int max = defaultMax;
 
         for (PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
             String name = perm.getPermission();
-            if (name.startsWith("danarent.limit.")) {
-                try {
-                    int limit = Integer.parseInt(name.substring("danarent.limit.".length()));
-                    if (limit > max) {
-                        max = limit;
-                    }
-                } catch (NumberFormatException ignored) {}
+            if (perm.getValue()) {
+                if (name.startsWith("danarent.limit.create.")) {
+                    try {
+                        int limit = Integer.parseInt(name.substring("danarent.limit.create.".length()));
+                        if (limit > max) max = limit;
+                    } catch (NumberFormatException ignored) {}
+                } else if (name.startsWith("danarent.limit.")) {
+                    try {
+                        int limit = Integer.parseInt(name.substring("danarent.limit.".length()));
+                        if (limit > max) max = limit;
+                    } catch (NumberFormatException ignored) {}
+                }
             }
         }
         return max;
